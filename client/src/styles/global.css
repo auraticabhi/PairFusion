@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Deep Space Color Palette */
+        --deep-space-bg: 15 23 42; /* slate-900 */
+        --deep-space-surface: 30 41 59; /* slate-800 */
+        --deep-space-border: 51 65 85; /* slate-700 */
+        --deep-space-text: 226 232 240; /* slate-200 */
+        --deep-space-muted: 148 163 184; /* slate-400 */
+        
+        /* Accent Colors */
+        --violet-primary: 139 92 246; /* violet-500 */
+        --violet-light: 167 139 250; /* violet-400 */
+        --pink-primary: 236 72 153; /* pink-500 */
+        --pink-light: 244 114 182; /* pink-400 */
+        
+        /* Scrollbar Variables */
+        --sb-track-color: rgb(30 41 59); /* slate-800 */
+        --sb-thumb-color: rgb(100 116 139 / 0.7); /* slate-500/70 */
+        --sb-size: 8px;
+    }
+}
+
+@layer components {
+    .view-title {
+        @apply mb-2 w-full border-b border-slate-800/50 pb-2 text-start text-lg  text-slate-200;
+        @apply bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white;
+        @apply bg-gradient-to-r from-violet-600 to-purple-600;
+        @apply border border-violet-500/50 hover:border-violet-400/70;
+        @apply transition-all duration-300 ease-out;
+        @apply hover:from-violet-500 hover:to-purple-500;
+        @apply hover:scale-105 hover:-translate-y-1;
+        @apply hover:shadow-xl hover:shadow-violet-500/25;
+        @apply active:scale-100 active:translate-y-0;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold;
+        @apply bg-gradient-to-r from-slate-700 to-slate-600 text-slate-200;
+        @apply border border-slate-600/50 hover:border-slate-500/70;
+        @apply transition-all duration-300 ease-out;
+        @apply hover:from-slate-600 hover:to-slate-500;
+        @apply hover:scale-105 hover:-translate-y-1;
+        @apply hover:shadow-lg hover:shadow-slate-500/20;
+        @apply active:scale-100 active:translate-y-0;
+    }
+
+    .your-button-class {
+    color: #CBD5E1;
+    }
+    .your-button-class:hover {
+    color: #FFFFFF;
+    }
+
+    /* Glass Panel Effect */
+    .glass-panel {
+        @apply bg-gradient-to-br from-slate-800/40 to-slate-900/60;
+        @apply border border-slate-700/50 backdrop-blur-sm;
+        @apply shadow-xl shadow-slate-900/20;
+    }
+
+    .cosmic-glow {
+        position: relative;
+    }
+
+    .cosmic-glow::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        background: linear-gradient(45deg, 
+            rgb(139 92 246 / 0.3), 
+            rgb(236 72 153 / 0.3), 
+            rgb(139 92 246 / 0.3)
+        );
+        border-radius: inherit;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: xor;
+        -webkit-mask-composite: xor;
+        pointer-events: none;
+    }
+
+    /* Animated Gradient Text */
+    .gradient-text {
+        @apply bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400;
+        @apply bg-clip-text text-transparent;
+        background-size: 200% 200%;
+        animation: gradient-shift 3s ease-in-out infinite;
+    }
+
+    @keyframes gradient-shift {
+        0%, 100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+}
+
+body {
+    font-family: "Space Grotesk", sans-serif;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+
+    --sb-track-color: #3d404a;
+    --sb-thumb-color: #e1e1ffb3;
+    --sb-size: 6px;
+
+    background: linear-gradient(135deg, 
+        rgb(15 23 42) 0%, 
+        rgb(15 23 42) 25%, 
+        rgb(30 41 59) 50%, 
+        rgb(15 23 42) 75%, 
+        rgb(15 23 42) 100%
+    );
+
+    color: rgb(226 232 240);
+}
+
+
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+}
+
+::-webkit-scrollbar-track {
+    background: #1F2937;
+    border-radius: 5px;
+    height: var(--sb-size);
+    width: var(--sb-size);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4B5563;
+    border-radius: 5px;
+    height: var(--sb-size);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    body {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+}
+
+@keyframes up-down {
+    0% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Editor */
+
+.cm-editor {
+    max-height: 93vh;
+}
+
+.cm-editor .cm-scroller {
+    font-family: "Space Mono", monospace;
+    /* min-height: 100vh; */
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .cm-editor {
+        max-height: calc(93vh - 60px);
+    }
+
+    .cm-editor .cm-scroller {
+        min-height: calc(93vh - 60px);
+    }
+}
+
+@keyframes octocat-wave {
+    0%,
+    100% {
+        transform: rotate(0);
+    }
+    20%,
+    60% {
+        transform: rotate(-25deg);
+    }
+    40%,
+    80% {
+        transform: rotate(10deg);
+    }
+}

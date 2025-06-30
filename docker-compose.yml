@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Redis Service
+  redis:
+    image: "redis/redis-stack-server:latest"
+    container_name: pair-fusion-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - pair-fusion-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Server Service
+  server:
+    image: auraticabhi/pair-fusion-server:latest 
+    container_name: pair-fusion-server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    networks:
+      - pair-fusion-net
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Client Service
+  client:
+    image: auraticabhi/pair-fusion-client:latest
+    container_name: pair-fusion-client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    networks:
+      - pair-fusion-net
+    restart: unless-stopped
+
+networks:
+  pair-fusion-net:
+    driver: bridge
