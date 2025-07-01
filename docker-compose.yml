@@ -5,8 +5,8 @@ services:
   redis:
     image: "redis/redis-stack-server:latest"
     container_name: pair-fusion-redis
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
     networks:
       - pair-fusion-net
     restart: unless-stopped
@@ -20,8 +20,8 @@ services:
   server:
     image: auraticabhi/pair-fusion-server:latest 
     container_name: pair-fusion-server
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     depends_on:
       - redis
     networks:
@@ -40,13 +40,40 @@ services:
   client:
     image: auraticabhi/pair-fusion-client:latest
     container_name: pair-fusion-client
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
     depends_on:
       - server
     networks:
       - pair-fusion-net
+    environment:
+      - VITE_BACKEND_URL=https://pair-fusion.linkpc.net
     restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: pair-fusion-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - client
+      - server
+    networks:
+      - pair-fusion-net
+
+  certbot:
+    image: certbot/certbot
+    container_name: pair-fusion-certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email abhijeetgupta989@gmail.com -d pair-fusion.linkpc.net --text --agree-tos --non-interactive
 
 networks:
   pair-fusion-net:
