@@ -20,7 +20,7 @@ const logger = pino({
 
 const allowedOrigins = [
     'http://localhost:5173',
-    
+    'https://pair-fusion.vercel.app'
 ];
 
 interface CorsOptions {
@@ -28,19 +28,19 @@ interface CorsOptions {
     credentials: boolean;
 }
 
-// const corsOptions: CorsOptions = {
-//     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void => {
-//         if (!origin) return callback(null, true);
-//         if (allowedOrigins.indexOf(origin) === -1) {
-//             const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//             return callback(new Error(msg), false);
-//         }
-//         return callback(null, true);
-//     },
-//     credentials: true
-// };
+const corsOptions: CorsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+};
 
-const corsOptions = { origin: '*' };
+// const corsOptions = { origin: '*' };
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));

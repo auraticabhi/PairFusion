@@ -51,18 +51,18 @@ function useUserActivity() {
     )
 
     const handleUserTyping = useCallback(
-        ({ user }: { user: RemoteUser }) => {
-            setUsers((users) => {
-                return users.map((u) => {
-                    if (u.socketId === user.socketId) {
-                        return user
+        ({ user: incomingUserUpdate }: { user: Partial<RemoteUser> & { socketId: string } }) => {
+            setUsers((currentUsers) =>
+                currentUsers.map((existingUser) => {
+                    if (existingUser.socketId === incomingUserUpdate.socketId) {
+                        return { ...existingUser, ...incomingUserUpdate };
                     }
-                    return u
+                    return existingUser;
                 })
-            })
+            );
         },
-        [setUsers],
-    )
+        [setUsers]
+    );
 
     useEffect(() => {
         document.addEventListener(
